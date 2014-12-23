@@ -1,0 +1,11 @@
+--- libosmscout/libosmscout-map-opengl/src/Makefile.am.omv~	2014-12-23 20:33:26.039338444 +0100
++++ libosmscout/libosmscout-map-opengl/src/Makefile.am	2014-12-23 20:33:57.346233254 +0100
+@@ -8,7 +8,7 @@ lib_LTLIBRARIES = libosmscoutmapopengl.l
+ libosmscoutmapopengl_la_LDFLAGS  = -no-undefined \
+                                   $(LIBOSMSCOUT_LIBS) \
+                                   $(GLUT_LIBS) \
+-                                  $(LIBOPENGL_LIBS)
++                                  $(LIBOPENGL_LIBS) -lGLU
+ 
+ libosmscoutmapopengl_la_SOURCES = osmscout/MapPainterOpenGL.cpp
+ 
