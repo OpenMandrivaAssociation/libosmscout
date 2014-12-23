@@ -147,6 +147,14 @@ for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libos
 	cd ..
 done
 
+# NOTYET
+if false; then
+	# Build map of Switzerland
+	cd maps
+	wget http://download.geofabrik.de/europe/switzerland-latest.osm.pbf
+	./build.sh switzerland-latest.osm.pbf
+fi
+
 %install
 cat >previous.list <<'EOF'
 %dir 
