@@ -44,6 +44,7 @@ BuildRequires: pkgconfig(libagg)
 # libosmscout-map-opengl
 BuildRequires: pkgconfig(gl)
 BuildRequires: pkgconfig(glu)
+BuildRequires: pkgconfig(glut)
 
 # libosmscout-map-svg
 BuildRequires: pkgconfig(pango)
