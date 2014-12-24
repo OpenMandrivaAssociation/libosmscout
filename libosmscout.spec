@@ -105,6 +105,33 @@ Map style editor for %{name}
 %files StyleEditor
 %{_bindir}/StyleEditor
 
+%package demos
+Summary: Demo applications showing %{name}
+Group: Sciences/Geosciences
+
+%description demos
+Demo applications showing %{name}
+
+%files demos
+%{_bindir}/CachePerformance
+%{_bindir}/CalculateResolution
+%{_bindir}/DrawMapAgg
+%{_bindir}/DrawMapCairo
+%{_bindir}/DrawMapOpenGL
+%{_bindir}/DrawMapQt
+%{_bindir}/DrawMapSVG
+%{_bindir}/LocationLookup
+%{_bindir}/LookupPOI
+%{_bindir}/NumberSetPerformance
+%{_bindir}/PerformanceTest
+%{_bindir}/ReaderScannerPerformance
+%{_bindir}/ResourceConsumption
+%{_bindir}/ResourceConsumptionQt
+%{_bindir}/ReverseLocationLookup
+%{_bindir}/Routing
+%{_bindir}/Srtm
+%{_bindir}/Tiler
+
 %prep
 %if "%{scmrev}" == ""
 %setup -q -n %{name}-%{version}%{beta}
@@ -113,7 +140,7 @@ Map style editor for %{name}
 %endif
 %apply_patches
 
-for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo Import OSMScout2 StyleEditor; do
+for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo Import OSMScout2 StyleEditor Demos Tests; do
 	cd $i
 	[ -e autogen.sh ] && ./autogen.sh
 	if [ "$i" = "OSMScout2" -o "$i" = "StyleEditor" ]; then
@@ -135,7 +162,7 @@ EOF
 done
 
 %build
-for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo Import OSMScout2 StyleEditor; do
+for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo Import OSMScout2 StyleEditor Demos Tests; do
 	cd $i
 	if [ -e configure ]; then
 		%configure
@@ -154,6 +181,8 @@ if false; then
 	cd maps
 	wget http://download.geofabrik.de/europe/switzerland-latest.osm.pbf
 	./build.sh switzerland-latest.osm.pbf
+	cd switzerland-latest
+	ln -s ../../stylesheets/* .
 fi
 
 %install
@@ -166,7 +195,7 @@ cat >previous.list <<'EOF'
 %dir %{_datadir}
 %{_libdir}/pkgconfig
 EOF
-for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo Import OSMScout2 StyleEditor; do
+for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo Import OSMScout2 StyleEditor Demos Tests; do
 	cd $i
 	%makeinstall_std
 	find %buildroot -name "*.la" |xargs rm -f
