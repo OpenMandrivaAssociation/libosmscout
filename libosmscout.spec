@@ -22,6 +22,8 @@ Release: 0.%{beta}.%{scmrev}.1
 Source0: %{name}-%{scmrev}.tar.xz
 %endif
 %endif
+# Not part of libosmscout, but closely related to the importer
+Source1: http://m.m.i24.cc/osmconvert.c
 Patch0: libosmscout-fix-cxxflags-detection.patch
 Patch1: libosmscout-opengl-linkage.patch
 Summary: High-level interfaces to offline rendering and routing of OpenStreetMap data
@@ -83,7 +85,9 @@ Group: Sciences/Geosciences
 OpenStreetMap data importer for %{name}
 
 %files import
+%{_bindir}/osmconvert
 %{_bindir}/Import
+%{_datadir}/%{name}
 
 %package OSMScout
 Summary: Sample map viewer for %{name}
@@ -174,16 +178,7 @@ for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libos
 	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/src/.libs
 	cd ..
 done
-
-# NOTYET
-if false; then
-	# Build map of Switzerland
-	cd maps
-	wget http://download.geofabrik.de/europe/switzerland-latest.osm.pbf
-	./build.sh switzerland-latest.osm.pbf
-	cd switzerland-latest
-	ln -s ../../stylesheets/* .
-fi
+%__cc %{optflags} -o osmconvert %{SOURCE1} -lz
 
 %install
 cat >previous.list <<'EOF'
@@ -207,3 +202,11 @@ done
 
 install -m 755 OSMScout2/debug/OSMScout %{buildroot}%{_bindir}/
 install -m 755 StyleEditor/debug/StyleEditor %{buildroot}%{_bindir}/
+
+install -m 755 osmconvert %{buildroot}%{_bindir}/
+
+mkdir -p %{buildroot}%{_datadir}/%{name}
+cp -a stylesheets %{buildroot}%{_datadir}/%{name}
+cp -a maps %{buildroot}%{_datadir}/%{name}
+cd %{buildroot}%{_datadir}/%{name}/maps
+ln -s ../stylesheets/* .
