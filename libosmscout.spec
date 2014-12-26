@@ -26,6 +26,7 @@ Source0: %{name}-%{scmrev}.tar.xz
 Source1: http://m.m.i24.cc/osmconvert.c
 Patch0: libosmscout-fix-cxxflags-detection.patch
 Patch1: libosmscout-opengl-linkage.patch
+Patch2:	libosmscout-build.sh-makeinstall.patch
 Summary: High-level interfaces to offline rendering and routing of OpenStreetMap data
 URL: http://libosmscout.sf.net/
 License: LGPL
@@ -208,5 +209,3 @@ install -m 755 osmconvert %{buildroot}%{_bindir}/
 mkdir -p %{buildroot}%{_datadir}/%{name}
 cp -a stylesheets %{buildroot}%{_datadir}/%{name}
 cp -a maps %{buildroot}%{_datadir}/%{name}
-cd %{buildroot}%{_datadir}/%{name}/maps
-ln -s ../stylesheets/* .
