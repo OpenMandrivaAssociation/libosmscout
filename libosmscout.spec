@@ -27,6 +27,8 @@ Source1: http://m.m.i24.cc/osmconvert.c
 Patch0: libosmscout-fix-cxxflags-detection.patch
 Patch1: libosmscout-opengl-linkage.patch
 Patch2:	libosmscout-build.sh-makeinstall.patch
+Patch3: libosmscout-render-contour-lines.patch
+Patch4: libosmscout-label-contour-lines.patch
 Summary: High-level interfaces to offline rendering and routing of OpenStreetMap data
 URL: http://libosmscout.sf.net/
 License: LGPL

@@ -1,0 +1,10 @@
+--- libosmscout/libosmscout-import/src/osmscout/import/Import.cpp.omv~	2015-01-04 23:57:50.083130196 +0100
++++ libosmscout/libosmscout-import/src/osmscout/import/Import.cpp	2015-01-04 23:58:08.650296853 +0100
+@@ -583,6 +583,7 @@ namespace osmscout {
+ 
+     typeConfig->RegisterNameTag("name",0);
+     typeConfig->RegisterNameTag("place_name",1);
++    typeConfig->RegisterNameTag("ele", 2); // hack for contour lines
+ 
+     /* 1 */
+     modules.push_back(new TypeDataGenerator());
