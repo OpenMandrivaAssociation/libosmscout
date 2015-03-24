@@ -64,6 +64,7 @@ BuildRequires: pkgconfig(libpng)
 BuildRequires: pkgconfig(Qt5Qml)
 BuildRequires: pkgconfig(Qt5Positioning)
 BuildRequires: pkgconfig(Qt5Widgets)
+BuildRequires: qmake5
 
 %description
 High-level interfaces to offline rendering and routing of OpenStreetMap data
