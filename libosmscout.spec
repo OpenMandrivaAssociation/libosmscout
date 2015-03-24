@@ -1,6 +1,6 @@
 %define major 0
 %define beta %{nil}
-%define scmrev 20141223
+%define scmrev 20150323
 
 Name: libosmscout
 Version: 0.0.1
@@ -28,7 +28,7 @@ Patch0: libosmscout-fix-cxxflags-detection.patch
 Patch1: libosmscout-opengl-linkage.patch
 Patch2:	libosmscout-build.sh-makeinstall.patch
 Patch3: libosmscout-render-contour-lines.patch
-Patch4: libosmscout-label-contour-lines.patch
+#Patch4: libosmscout-label-contour-lines.patch
 Summary: High-level interfaces to offline rendering and routing of OpenStreetMap data
 URL: http://libosmscout.sf.net/
 License: LGPL
@@ -59,6 +59,11 @@ BuildRequires: pkgconfig(pangoft2)
 BuildRequires: pkgconfig(cairo)
 BuildRequires: pkgconfig(pangocairo)
 BuildRequires: pkgconfig(libpng)
+
+# OSMScout2
+BuildRequires: pkgconfig(Qt5Qml)
+BuildRequires: pkgconfig(Qt5Positioning)
+BuildRequires: pkgconfig(Qt5Widgets)
 
 %description
 High-level interfaces to offline rendering and routing of OpenStreetMap data
@@ -127,6 +132,7 @@ Demo applications showing %{name}
 %{_bindir}/DrawMapOpenGL
 %{_bindir}/DrawMapQt
 %{_bindir}/DrawMapSVG
+%{_bindir}/DumpOSS
 %{_bindir}/LocationLookup
 %{_bindir}/LookupPOI
 %{_bindir}/NumberSetPerformance
@@ -161,9 +167,17 @@ EOF
 		done
 		echo '</qresource></RCC>' >>res.qrc
 	fi
+	if [ "$i" = "OSMScout2" ]; then
+		sed -i -e 's,^ANDROID_EXTRA_LIBS.*=,LIBS +=,' *.pro
+	fi
 	if [ "$i" = "StyleEditor" ]; then
 		echo 'RESOURCES += res.qrc' >>StyleEditor.pro
 		sed -i -e 's,::fromLocalFile("qml/main.qml"),("qrc:/qml/main.qml"),g' src/MainWindow.cpp
+cat >>StyleEditor.pro <<EOF
+LIBS += ../libosmscout/src/.libs/libosmscout.so \
+	../libosmscout-map/src/.libs//libosmscoutmap.so \
+	../libosmscout-map-qt/src/.libs/libosmscoutmapqt.so
+EOF
 	fi
 	cd ..
 done
