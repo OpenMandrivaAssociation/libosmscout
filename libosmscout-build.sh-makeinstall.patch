@@ -1,11 +1,11 @@
---- libosmscout/maps/build.sh.omv~	2014-12-26 18:08:08.569903560 +0100
-+++ libosmscout/maps/build.sh	2014-12-26 18:11:37.898071066 +0100
+--- libosmscout/maps/build.sh.0002~	2016-08-23 01:24:43.687391374 +0200
++++ libosmscout/maps/build.sh	2016-08-23 01:25:21.123016536 +0200
 @@ -58,6 +58,6 @@ echo " $outputFile" | tee -a $outputFile
  echo "Options:" | tee -a $outputFile
  echo " $options" | tee -a $outputFile
  echo "Call:" | tee -a $outputFile
--echo " ../Import/src/Import $options --typefile ../stylesheets/map.ost --destinationDirectory $targetDirectory $mappingFile" | tee -a $outputFile
-+echo " Import $options --typefile /usr/share/libosmscout/stylesheets/map.ost --destinationDirectory $targetDirectory $mappingFile" | tee -a $outputFile
+-echo " ../Import/src/Import $options --typefile ../stylesheets/map.ost --destinationDirectory $targetDirectory $@" | tee -a $outputFile
++echo " Import $options --typefile ../stylesheets/map.ost --destinationDirectory $targetDirectory $@" | tee -a $outputFile
  
--../Import/src/Import $options --typefile ../stylesheets/map.ost --destinationDirectory "$targetDirectory" "$mappingFile" 2>&1 | tee -a $outputFile
-+Import $options --typefile /usr/share/libosmscout/stylesheets/map.ost --destinationDirectory "$targetDirectory" "$mappingFile" 2>&1 | tee -a $outputFile
+-../Import/src/Import $options --typefile ../stylesheets/map.ost --destinationDirectory "$targetDirectory" "$@" 2>&1 | tee -a $outputFile
++Import $options --typefile ../stylesheets/map.ost --destinationDirectory "$targetDirectory" "$@" 2>&1 | tee -a $outputFile

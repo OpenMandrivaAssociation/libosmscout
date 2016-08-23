@@ -1,13 +1,13 @@
 %define major 0
 %define beta %{nil}
-%define scmrev 20150323
+%define scmrev 20160823
 
 Name: libosmscout
 Version: 0.0.1
 # Code is from git://git.code.sf.net/p/libosmscout/code
 %if "%{beta}" == ""
 %if "%{scmrev}" == ""
-Release: 2
+Release: 1
 Source0: %{name}-%{version}.tar.bz2
 %else
 Release: 0.%{scmrev}.1
@@ -24,10 +24,8 @@ Source0: %{name}-%{scmrev}.tar.xz
 %endif
 # Not part of libosmscout, but closely related to the importer
 Source1: http://m.m.i24.cc/osmconvert.c
-Patch0: libosmscout-fix-cxxflags-detection.patch
 Patch1: libosmscout-opengl-linkage.patch
 Patch2:	libosmscout-build.sh-makeinstall.patch
-Patch3: libosmscout-render-contour-lines.patch
 #Patch4: libosmscout-label-contour-lines.patch
 Summary: High-level interfaces to offline rendering and routing of OpenStreetMap data
 URL: http://libosmscout.sf.net/
@@ -64,12 +62,13 @@ BuildRequires: pkgconfig(libpng)
 BuildRequires: pkgconfig(Qt5Qml)
 BuildRequires: pkgconfig(Qt5Positioning)
 BuildRequires: pkgconfig(Qt5Widgets)
+BuildRequires: pkgconfig(Qt5Quick)
 BuildRequires: qmake5
 
 %description
 High-level interfaces to offline rendering and routing of OpenStreetMap data
 
-%{expand:%(for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo; do
+%{expand:%(for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo libosmscout-client-qt; do
 	N=`echo $i |sed -e 's,^lib,,;s,-,_,g'`
 	echo "%%define ${N} %%mklibname $N %{major}"
 	echo "%%define ${N}_devel %%mklibname -d $N"
@@ -101,6 +100,7 @@ OpenStreetMap data importer for %{name}
 %package OSMScout
 Summary: Sample map viewer for %{name}
 Group: Sciences/Geosciences
+Requires: qt5-qtpositioning
 
 %description OSMScout
 Sample map viewer for %{name}
@@ -126,6 +126,10 @@ Group: Sciences/Geosciences
 Demo applications showing %{name}
 
 %files demos
+%{_bindir}/CoordinateEncoding
+%{_bindir}/LocationDescription
+%{_bindir}/ThreadedDatabase
+%{_bindir}/WorkQueue
 %{_bindir}/CachePerformance
 %{_bindir}/CalculateResolution
 %{_bindir}/DrawMapAgg
@@ -154,7 +158,7 @@ Demo applications showing %{name}
 %endif
 %apply_patches
 
-for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo Import OSMScout2 StyleEditor Demos Tests; do
+for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo libosmscout-client-qt Import OSMScout2 StyleEditor Demos Tests; do
 	cd $i
 	[ -e autogen.sh ] && ./autogen.sh
 	if [ "$i" = "OSMScout2" -o "$i" = "StyleEditor" ]; then
@@ -184,7 +188,7 @@ EOF
 done
 
 %build
-for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo Import OSMScout2 StyleEditor Demos Tests; do
+for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo libosmscout-client-qt Import OSMScout2 StyleEditor Demos Tests; do
 	cd $i
 	if [ -e configure ]; then
 		%configure
@@ -208,7 +212,7 @@ cat >previous.list <<'EOF'
 %dir %{_datadir}
 %{_libdir}/pkgconfig
 EOF
-for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo Import OSMScout2 StyleEditor Demos Tests; do
+for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo libosmscout-client-qt Import OSMScout2 StyleEditor Demos Tests; do
 	cd $i
 	%makeinstall_std
 	find %buildroot -name "*.la" |xargs rm -f
