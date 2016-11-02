@@ -1,6 +1,6 @@
 %define major 0
 %define beta %{nil}
-%define scmrev 20160823
+%define scmrev 20161102
 
 Name: libosmscout
 Version: 0.0.1
