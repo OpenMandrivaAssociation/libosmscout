@@ -136,9 +136,13 @@ Demo applications showing %{name}
 %{_bindir}/DrawMapOpenGL
 %{_bindir}/DrawMapQt
 %{_bindir}/DrawMapSVG
+%{_bindir}/DrawTextQt
 %{_bindir}/DumpOSS
+%{_bindir}/Geometry
 %{_bindir}/LocationLookup
 %{_bindir}/LookupPOI
+%{_bindir}/MapRotate
+%{_bindir}/MultiDBRouting
 %{_bindir}/NumberSetPerformance
 %{_bindir}/PerformanceTest
 %{_bindir}/ReaderScannerPerformance
