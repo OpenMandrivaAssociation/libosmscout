@@ -1,6 +1,6 @@
 %define major 0
 %define beta %{nil}
-%define scmrev 20161102
+%define scmrev 20170326
 
 Name: libosmscout
 Version: 0.0.1
@@ -22,8 +22,6 @@ Release: 0.%{beta}.%{scmrev}.1
 Source0: %{name}-%{scmrev}.tar.xz
 %endif
 %endif
-# Not part of libosmscout, but closely related to the importer
-Source1: http://m.m.i24.cc/osmconvert.c
 Patch1: libosmscout-opengl-linkage.patch
 Patch2:	libosmscout-build.sh-makeinstall.patch
 #Patch4: libosmscout-label-contour-lines.patch
@@ -31,6 +29,7 @@ Summary: High-level interfaces to offline rendering and routing of OpenStreetMap
 URL: http://libosmscout.sf.net/
 License: LGPL
 Group: Sciences/Geosciences
+Suggests: osmconvert
 
 # libosmscout-import
 BuildRequires: pkgconfig(protobuf)
@@ -88,12 +87,12 @@ done)}
 %package import
 Summary: OpenStreetMap data importer for %{name}
 Group: Sciences/Geosciences
+Requires: osmconvert
 
 %description import
 OpenStreetMap data importer for %{name}
 
 %files import
-%{_bindir}/osmconvert
 %{_bindir}/Import
 %{_datadir}/%{name}
 
@@ -200,7 +199,6 @@ for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libos
 	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/src/.libs
 	cd ..
 done
-%__cc %{optflags} -o osmconvert %{SOURCE1} -lz
 
 %install
 cat >previous.list <<'EOF'
@@ -224,8 +222,6 @@ done
 
 install -m 755 OSMScout2/debug/OSMScout %{buildroot}%{_bindir}/
 install -m 755 StyleEditor/debug/StyleEditor %{buildroot}%{_bindir}/
-
-install -m 755 osmconvert %{buildroot}%{_bindir}/
 
 mkdir -p %{buildroot}%{_datadir}/%{name}
 cp -a stylesheets %{buildroot}%{_datadir}/%{name}
