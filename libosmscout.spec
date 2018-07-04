@@ -1,29 +1,38 @@
+# To verify the package works after an update:
+# mkdir maps
+# cd maps
+# wget https://planet.osm.ch/switzerland-exact.osm.pbf
+# Import switzerland-exact.osm.pbf --destinationDirectory . --typefile /usr/share/stylesheets/map.ost
+# DrawMapQt `pwd` /usr/share/stylesheets/standard.oss 4096 8192 9.06 47.05 30000 test.png
+# display test.png
+
 %define major 0
 %define beta %{nil}
-%define scmrev 20170326
+%define scmrev 20180704
+%define devname %mklibname -d osmscout
 
 Name: libosmscout
 Version: 0.0.1
 # Code is from git://git.code.sf.net/p/libosmscout/code
 %if "%{beta}" == ""
 %if "%{scmrev}" == ""
-Release: 2
+Release: 1
 Source0: %{name}-%{version}.tar.bz2
 %else
-Release: 0.%{scmrev}.2
+Release: 0.%{scmrev}.1
 Source0: %{name}-%{scmrev}.tar.xz
 %endif
 %else
 %if "%{scmrev}" == ""
-Release: 0.%{beta}.2
+Release: 0.%{beta}.1
 Source0: %{name}-%{version}%{beta}.tar.bz2
 %else
-Release: 0.%{beta}.%{scmrev}.2
+Release: 0.%{beta}.%{scmrev}.1
 Source0: %{name}-%{scmrev}.tar.xz
 %endif
 %endif
-Patch1: libosmscout-opengl-linkage.patch
-Patch2:	libosmscout-build.sh-makeinstall.patch
+#Patch1: libosmscout-opengl-linkage.patch
+#Patch2:	libosmscout-build.sh-makeinstall.patch
 #Patch4: libosmscout-label-contour-lines.patch
 Summary: High-level interfaces to offline rendering and routing of OpenStreetMap data
 URL: http://libosmscout.sf.net/
@@ -64,25 +73,19 @@ BuildRequires: pkgconfig(Qt5Widgets)
 BuildRequires: pkgconfig(Qt5Quick)
 BuildRequires: qmake5
 
+%libpackage osmscout_client_qt 0
+%libpackage osmscout_gpx 0
+%libpackage osmscout_import 0
+%libpackage osmscout_map_agg 0
+%libpackage osmscout_map_cairo 0
+%libpackage osmscout_map_qt 0
+%libpackage osmscout_map 0
+%libpackage osmscout_map_svg 0
+%libpackage osmscout 0
+%libpackage osmscout_test 0
+
 %description
 High-level interfaces to offline rendering and routing of OpenStreetMap data
-
-%{expand:%(for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo libosmscout-client-qt; do
-	N=`echo $i |sed -e 's,^lib,,;s,-,_,g'`
-	echo "%%define ${N} %%mklibname $N %{major}"
-	echo "%%define ${N}_devel %%mklibname -d $N"
-	echo "%%package -n %%${N}"
-	echo "Summary: $i, a part of %{name}"
-	echo "Group: Sciences/Geosciences"
-	echo "%%description -n %%${N}"
-	echo "$i, a part of %{name}"
-	echo "%%package -n %%${N}_devel"
-	echo "Summary: Development files for $i, a part of %{name}"
-	echo "%%description -n %%${N}_devel"
-	echo "Development files for $i, a part of %{name}"
-	echo "%%files -n %%${N} -f $i.list"
-	echo "%%files -n %%${N}_devel -f $i-devel.list"
-done)}
 
 %package import
 Summary: OpenStreetMap data importer for %{name}
@@ -94,6 +97,7 @@ OpenStreetMap data importer for %{name}
 
 %files import
 %{_bindir}/Import
+%{_bindir}/BasemapImport
 %{_datadir}/%{name}
 
 %package OSMScout
@@ -105,7 +109,10 @@ Requires: qt5-qtpositioning
 Sample map viewer for %{name}
 
 %files OSMScout
-%{_bindir}/OSMScout
+%{_bindir}/OSMScout2
+%dir %{_datadir}/osmscout
+%doc %{_datadir}/osmscout/docs
+%{_datadir}/stylesheets
 
 %package StyleEditor
 Summary: Map style editor for %{name}
@@ -115,7 +122,6 @@ Group: Sciences/Geosciences
 Map style editor for %{name}
 
 %files StyleEditor
-%{_bindir}/StyleEditor
 
 %package demos
 Summary: Demo applications showing %{name}
@@ -125,33 +131,48 @@ Group: Sciences/Geosciences
 Demo applications showing %{name}
 
 %files demos
-%{_bindir}/CoordinateEncoding
-%{_bindir}/LocationDescription
-%{_bindir}/ThreadedDatabase
-%{_bindir}/WorkQueue
-%{_bindir}/CachePerformance
-%{_bindir}/CalculateResolution
-%{_bindir}/DrawMapAgg
-%{_bindir}/DrawMapCairo
-%{_bindir}/DrawMapOpenGL
-%{_bindir}/DrawMapQt
-%{_bindir}/DrawMapSVG
-%{_bindir}/DrawTextQt
-%{_bindir}/DumpOSS
-%{_bindir}/Geometry
-%{_bindir}/LocationLookup
-%{_bindir}/LookupPOI
-%{_bindir}/MapRotate
-%{_bindir}/MultiDBRouting
-%{_bindir}/NumberSetPerformance
-%{_bindir}/PerformanceTest
-%{_bindir}/ReaderScannerPerformance
-%{_bindir}/ResourceConsumption
-%{_bindir}/ResourceConsumptionQt
-%{_bindir}/ReverseLocationLookup
 %{_bindir}/Routing
-%{_bindir}/Srtm
+%{_bindir}/RoutingAnimation
+%{_bindir}/Navigation
 %{_bindir}/Tiler
+%{_bindir}/PerformanceTest
+%{_bindir}/DrawMapQt
+%{_bindir}/LocationDescription
+%{_bindir}/LocationLookupForm
+%{_bindir}/LocationLookup
+%{_bindir}/POILookupForm
+%{_bindir}/DumpData
+%{_bindir}/ResourceConsumptionQt
+%{_bindir}/DumpOSS
+%{_bindir}/LookupPOI
+%{_bindir}/DrawMapSVG
+%{_bindir}/GpxPipe
+%{_bindir}/ReverseLocationLookup
+%{_bindir}/Coverage
+%{_bindir}/DrawMapAgg
+%{_bindir}/ResourceConsumption
+%{_bindir}/DrawMapCairo
+
+%package -n %{devname}
+Summary: Development files for libosmscout
+Group: Development/C
+Requires: %{mklibname osmscout_client_qt 0} = %{EVRD}
+Requires: %{mklibname osmscout_gpx 0} = %{EVRD}
+Requires: %{mklibname osmscout_import 0} = %{EVRD}
+Requires: %{mklibname osmscout_map_agg 0} = %{EVRD}
+Requires: %{mklibname osmscout_map_cairo 0} = %{EVRD}
+Requires: %{mklibname osmscout_map_qt 0} = %{EVRD}
+Requires: %{mklibname osmscout_map 0} = %{EVRD}
+Requires: %{mklibname osmscout_map_svg 0} = %{EVRD}
+Requires: %{mklibname osmscout 0} = %{EVRD}
+Requires: %{mklibname osmscout_test 0} = %{EVRD}
+
+%description -n %{devname}
+Development files for libosmscout
+
+%files -n %{devname}
+%{_includedir}/osmscout
+%{_libdir}/*.so
 
 %prep
 %if "%{scmrev}" == ""
@@ -161,6 +182,7 @@ Demo applications showing %{name}
 %endif
 %apply_patches
 
+%if 0
 for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo libosmscout-client-qt Import OSMScout2 StyleEditor Demos Tests; do
 	cd $i
 	[ -e autogen.sh ] && ./autogen.sh
@@ -189,8 +211,25 @@ EOF
 	fi
 	cd ..
 done
+%else
+%if "%{_lib}" != "lib"
+find . -name CMakeLists.txt |xargs sed -i -e 's,DESTINATION lib,DESTINATION %{_lib},g'
+%endif
+find . -name CMakeLists.txt |xargs sed -i -e '/set_property(TARGET.*/iset_target_properties(${THE_TARGET_NAME} PROPERTIES VERSION %{version} SOVERSION 0)'
+# Java bindings are disabled for now because of installation
+# location weirdness. Should be fixed properly later.
+%cmake \
+	-DBUILD_IMPORT_TOOL_FOR_DISTRIBUTION:BOOL=ON \
+	-DOSMSCOUT_BUILD_MAP_QT:BOOL=ON \
+	-DOSMSCOUT_BUILD_BINDING_JAVA:BOOL=OFF \
+%ifarch %{ix86} %{x86_64}
+	-DOSMSCOUT_ENABLE_SSE:BOOL=ON \
+%endif
+	-G Ninja
+%endif
 
 %build
+%if 0
 for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo libosmscout-client-qt Import OSMScout2 StyleEditor Demos Tests; do
 	cd $i
 	if [ -e configure ]; then
@@ -203,8 +242,12 @@ for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libos
 	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/src/.libs
 	cd ..
 done
+%else
+%ninja_build -C build
+%endif
 
 %install
+%if 0
 cat >previous.list <<'EOF'
 %dir 
 %dir %{_prefix}
@@ -230,3 +273,7 @@ install -m 755 StyleEditor/debug/StyleEditor %{buildroot}%{_bindir}/
 mkdir -p %{buildroot}%{_datadir}/%{name}
 cp -a stylesheets %{buildroot}%{_datadir}/%{name}
 cp -a maps %{buildroot}%{_datadir}/%{name}
+%else
+%ninja_install -C build
+%endif
+
