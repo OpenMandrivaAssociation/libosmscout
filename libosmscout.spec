@@ -16,7 +16,7 @@ Version: 0.0.1
 # Code is from git://git.code.sf.net/p/libosmscout/code
 %if "%{beta}" == ""
 %if "%{scmrev}" == ""
-Release: 1
+Release: 2
 Source0: %{name}-%{version}.tar.bz2
 %else
 Release: 0.%{scmrev}.1
