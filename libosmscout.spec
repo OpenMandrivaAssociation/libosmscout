@@ -180,7 +180,7 @@ Development files for libosmscout
 %else
 %setup -q -n %{name}
 %endif
-%apply_patches
+%autopatch -p1
 
 %if 0
 for i in libosmscout libosmscout-import libosmscout-map libosmscout-map-qt libosmscout-map-svg libosmscout-map-opengl libosmscout-map-agg libosmscout-map-cairo libosmscout-client-qt Import OSMScout2 StyleEditor Demos Tests; do
