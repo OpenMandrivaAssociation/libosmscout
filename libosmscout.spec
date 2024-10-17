@@ -35,7 +35,7 @@ Source0: %{name}-%{scmrev}.tar.xz
 #Patch2:	libosmscout-build.sh-makeinstall.patch
 #Patch4: libosmscout-label-contour-lines.patch
 Summary: High-level interfaces to offline rendering and routing of OpenStreetMap data
-URL: http://libosmscout.sf.net/
+URL: https://libosmscout.sf.net/
 License: LGPL
 Group: Sciences/Geosciences
 Suggests: osmconvert
